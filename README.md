@@ -5,7 +5,7 @@ This plugin adds a build wrapper to set environment variables from a HashiCorp [
 
 # Vault Authentication Backends
 This plugin allows authenticating against Vault using the AppRole authentication backend. Hashicorp recommends using AppRole for Servers / automated workflows (like Jenkins) and using Tokens (default mechanism, Github Token, ...) for every developer's machine.
-  Furthermore, this plugin allows using a Vault Token - either configured directly in Jenkins or read from an arbitrary file on the Jenkins Machine.
+  Furthermore, this plugin allows using a Github personal access token, or a Vault Token - either configured directly in Jenkins or read from an arbitrary file on the Jenkins Machine.
 
 ### How does AppRole work?
 In short: you register an approle auth backend using a self-chosen name (e.g. Jenkins). This approle is identified by a `role-id` and secured with a `secret_id`. If you have both of those values you can ask Vault for a token that can be used to access vault.
@@ -24,7 +24,7 @@ Implementing additional authentication backends is actually quite easy:
 
 Simply provide a class implementing `VaultTokenCredential` that contains a `Descriptor` extending `BaseStandardCredentialsDescriptor`.
 The `Descriptor` needs to be annotated with `@Extension`. Your credential needs to know how to authenticate with Vault and provide an authenticated Vault session.
-See [VaultAppRoleCredential.java](https://github.com/jenkinsci/hashicorp-vault-plugin/blob/master/src/main/java/com/datapipe/jenkins/vault/credentials/VaultTokenCredential) for an example.
+See [VaultAppRoleCredential.java](https://github.com/jenkinsci/hashicorp-vault-plugin/blob/master/src/main/java/com/datapipe/jenkins/vault/credentials/VaultAppRoleCredential.java) for an example.
 
 
 # Plugin Usage
@@ -103,6 +103,11 @@ The `BuildWrapper` did not change, so no changes to your Jenkinsfile should be n
 
 # CHANGELOG
 
+* **2017/05/22** - Feature Release - 2.1.0
+  * Vault Key Not Saved In Vault Error Messaging [JENKINS-38647](https://issues.jenkins-ci.org/browse/JENKINS-38647)
+  * Add support github token auth [JENKINS-38939](https://issues.jenkins-ci.org/browse/JENKINS-38939)
+* **2017/05/19** - Bugfix Release - 2.0.1
+  * Build fails if plugin is enabled for a job without secrets specified [JENKINS-44163](https://issues.jenkins-ci.org/browse/JENKINS-441630)
 * **2017/04/27** - Breaking change release (AppRole auth backend, Folder ability, improved configuration, ...)
 * **2017/04/10** - Feature Release - 1.4
   * Support reading Vault Token from file on disk [JENKINS-37713](issues.jenkins-ci.org/browse/JENKINS-37713)
